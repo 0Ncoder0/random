@@ -4,7 +4,6 @@
  * @param {Function} isEqual (a,b)=>isEqual
  */
 const duplicateRemoval = (arr, isEqual) => {
-  arr = arr.map(e => e)
   let i, k;
   // 从第二个元素开始遍历
   for (i = 1, k = arr.length - 1; i <= k; i++) {
@@ -22,7 +21,20 @@ const duplicateRemoval = (arr, isEqual) => {
   }
   return arr.slice(0, k + 1)
 }
-const arr = [1, 1, 1, 2, 2, 2, 3, 3, 4, 5, 6, 7, 8, 8]
-const isEqual = (a, b) => a === b
 
-console.log(arr, isEqual)
+/**
+ * 去重
+ * @param {any[]} arr 数组
+ * @param {Function} hash (a)=>hash
+ */
+const duplicateRemoval_hash = (arr, hash) => {
+  const hashMap = {}
+  const output = []
+  for (let i = 0; i < arr.length; i++) {
+    hashMap[hash(arr[i])] = arr[i]
+  }
+  for (let h in hashMap) {
+    output.push(hashMap[h])
+  }
+  return output
+}
