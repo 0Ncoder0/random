@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hover effect</title>
+</head>
+<style>
+  .group {
+    width: 1080px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .group h1{
+    margin-bottom: 60px;
+  }
+
+  /* Like flower */
+  .hover-001 {
+    position: relative;
+    top: -20px;
+    left: -20px;
+  }
+  .hover-001 .row {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  .hover-001 .row:first-child {
+    margin-bottom: 20px;
+  }
+
+  .hover-001 .row .box:first-child {
+    margin-right: 20px;
+  }
+
+  .hover-001 .row .box .inner-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 240px;
+    height: 92px;
+    box-shadow: 0px 6px 10px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+
+  .hover-001 .row .box .inner-box:hover {
+    box-shadow: 0px 4px 10px 0px rgba(35, 204, 209, 0.2);
+  }
+
+  .hover-001 .row .box {
+    transition: all 0.1s;
+  }
+
+  .hover-001 .row .box .inner-box {
+    transition: all 0.1s;
+  }
+
+  .hover-001 .row .box:hover .inner-box {
+    box-shadow: 0px 4px 10px 0px rgba(35, 204, 209, 0.2);
+  }
+
+  .hover-001 .row:first-child .box {
+    margin-top: 20px;
+  }
+
+  .hover-001 .row:first-child .box:hover {
+    margin-top: 0;
+    padding-bottom: 20px;
+  }
+
+  .hover-001 .row:last-child .box {
+    margin-bottom: 20px;
+  }
+
+  .hover-001 .row:last-child .box:hover {
+    margin-bottom: 0;
+    padding-top: 20px;
+  }
+
+  .hover-001 .row .box:first-child {
+    margin-left: 20px;
+  }
+
+  .hover-001 .row .box:first-child:hover {
+    margin-left: 0;
+    padding-right: 20px;
+  }
+
+  .hover-001 .row .box:last-child {
+    margin-right: 20px;
+  }
+
+  .hover-001 .row .box:last-child:hover {
+    margin-right: 0;
+    padding-left: 20px;
+  }
+</style>
+
+<body>
+  <div class="group">
+    <h1> Like flower </h1>
+    <div class="demo-box">
+      <div class="hover-001">
+        <div class="row">
+          <div class="box">
+            <div class="inner-box">Top left</div>
+          </div>
+          <div class="box">
+            <div class="inner-box">Top right</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="box">
+            <div class="inner-box">Bottom left</div>
+          </div>
+          <div class="box">
+            <div class="inner-box">Bottom right</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+
+</html>
