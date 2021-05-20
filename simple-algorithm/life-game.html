@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+      body {
+        margin: 0;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cell {
+        width: 5px;
+        height: 5px;
+      }
+      .cell.alive {
+        background-color: rgb(0, 255, 255);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="container">
+      <div v-for="row in table" class="row">
+        <div v-for="cell in row" class="cell" :class="{alive:cell}"></div>
+      </div>
+    </div>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          width: 100,
+          table: []
+        },
+        created() {
+          this.init()
+          setInterval(() => {
+            this.computeTable()
+            this.$forceUpdate()
+          }, 1000 / 60)
+        },
+        mounted() {
+          this.$el.style.height = window.innerHeight + 'px'
+          this.$el.style.width = window.innerWidth + 'px'
+        },
+        methods: {
+          init() {
+            const { width, table } = this
+            const half = width / 2
+            const border = 10
+            for (let i = 0; i < width; i++) {
+              table[i] = []
+              for (let k = 0; k < width; k++) {
+                table[i][k] = Math.random() > 0.95
+
+                // if (i > half - border && i < half + border && k > half - border && k < half + border) {
+                //   table[i][k] = Math.random() > 0.9
+                // } else {
+                //   table[i][k] = false
+                // }
+              }
+            }
+          },
+          computeTable() {
+            const { width, table, getCellArounds } = this
+            for (let i = 0; i < width; i++) {
+              for (let k = 0; k < width; k++) {
+                const arounds = getCellArounds(k, i)
+                const alives = arounds.length
+                const cell = table[i][k]
+                if (cell === true && (alives < 2 || alives > 3)) {
+                  table[i][k] = false
+                } else if (cell === false && alives >= 3) {
+                  table[i][k] = true
+                }
+              }
+            }
+          },
+          getCellArounds(x, y) {
+            const { width, table } = this
+            let list = []
+            if (y - 1 > 0) list = list.concat([table[y - 1][x - 1], table[y - 1][x], table[y - 1][x + 1]])
+            if (y + 1 < width) list = list.concat([table[y + 1][x - 1], table[y + 1][x], table[y + 1][x + 1]])
+            list = list.concat([table[y][x - 1], table[y][x + 1]])
+            return list.filter(bool => bool)
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
