@@ -2,16 +2,20 @@ import * as md5 from "md5-js";
 import * as CSS from "csstype";
 import _ from "lodash";
 
-export interface Styled {
-  [key: string]: Styled | CSS.Properties;
+export interface TStyled {
+  [key: string]: TStyled | CSS.Properties;
 }
+export type Styled = TStyled | CSS.Properties;
 
 export default class CssInJs {
+  /** 缓存样式的哈希值与类名的映射，若哈希值存在，则直接返回类名 */
+  private static hash2class = new Map<string, string>([]);
+
   private static prefix = "css-in-js";
   private static style = (() => {
     const style = document.createElement("style");
     document.head.appendChild(style);
-    style[CssInJs.prefix] = true;
+    style.setAttribute(CssInJs.prefix, "");
     return style;
   })();
 
@@ -19,7 +23,7 @@ export default class CssInJs {
    * 根据选择器和样式生成 css 内容
    */
   private static style2css = (selector: string, props: CSS.Properties) => {
-    const cssProps = Object.keys(props).map(key => `${_.kebabCase(key)}:${props[key]}`);
+    const cssProps = Object.keys(props).map(key => `\t${_.kebabCase(key)}:${props[key]};`);
     return [`${selector} {`, ...cssProps, "}"].join("\n");
   };
 
@@ -63,9 +67,15 @@ export default class CssInJs {
   };
 
   public static styled = (styled: Styled, className = CssInJs.randomClassName()) => {
+    console.time("hash-styled");
+    const hash = md5(styled);
+    console.timeEnd("hash-styled");
+    const exist = CssInJs.hash2class.get(hash);
+    if (exist) return exist;
+
     const css: string = CssInJs._styled(`.${className}`, styled);
     CssInJs.appendStyle(css);
-
+    CssInJs.hash2class.set(hash, className);
     return className;
   };
 }
