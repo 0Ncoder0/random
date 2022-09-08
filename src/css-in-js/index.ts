@@ -2,6 +2,10 @@ import * as md5 from "md5-js";
 import * as CSS from "csstype";
 import _ from "lodash";
 
+/**
+ * @doc https://github.com/0Ncoder0/random/tree/develop/src/css-in-js
+ */
+
 export interface TStyled {
   [key: string]: TStyled | CSS.Properties;
 }
@@ -25,6 +29,19 @@ export default class CssInJs {
   private static style2css = (selector: string, props: CSS.Properties) => {
     const cssProps = Object.keys(props).map(key => `\t${_.kebabCase(key)}:${props[key]};`);
     return [`${selector} {`, ...cssProps, "}"].join("\n");
+  };
+
+  /**
+   * 链接选择器
+   */
+  private static linkSelector = (...selectors: string[]) => {
+    const isPseudoClass = (selector: string) => /^:.+/.test(selector);
+    return selectors
+      .map(selector => {
+        if (isPseudoClass(selector)) return selector;
+        return " " + selector;
+      })
+      .join("");
   };
 
   /**
@@ -61,7 +78,9 @@ export default class CssInJs {
     });
 
     const style: string = CssInJs.style2css(selector, cssProps);
-    const styles: string[] = subSelector.map(sub => CssInJs._styled(`${selector} ${sub}`, styled[sub] as Styled));
+    const styles: string[] = subSelector.map(sub =>
+      CssInJs._styled(CssInJs.linkSelector(selector, sub), styled[sub] as Styled)
+    );
 
     return [style, ...styles].join("\n");
   };
