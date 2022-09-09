@@ -86,7 +86,7 @@ export default class CssInJs {
   };
 
   public static styled = (styled: Styled, className = CssInJs.randomClassName()) => {
-    const hash = md5(styled);
+    const hash = md5(JSON.stringify(styled));
     const exist = CssInJs.hash2class.get(hash);
     if (exist) return exist;
 
