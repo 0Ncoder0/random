@@ -40,8 +40,7 @@ const moveToSide = (state: State, to: "right" | "left", e: E): State => {
   return state;
 };
 
-const next = async (state: State, path: State[]): Promise<State[] | null> => {
-  await new Promise((r) => setTimeout(r, 500));
+const next = (state: State, path: State[]): State[] => {
   const form = whereIsFarmer(state);
   const to = form === "right" ? "left" : "right";
 
@@ -52,16 +51,16 @@ const next = async (state: State, path: State[]): Promise<State[] | null> => {
     if (isCircle(state, path)) continue;
     if (isGoal(state)) return [...path, state];
 
-    const result = await next(state, [...path, state]);
+    const result = next(state, [...path, state]);
     if (result) return result;
   }
 };
 
-const main = async () => {
+const main = () => {
   const start: State = { left: ["farmer", "fox", "goat", "grain"], right: [] };
   const path = [start];
 
-  const result = await next(start, path);
+  const result = next(start, path);
   result.forEach((e) => console.log(e));
 };
 
